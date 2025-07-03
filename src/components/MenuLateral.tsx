@@ -5,7 +5,6 @@ import { IoExitOutline } from "react-icons/io5"
 import { BiSolidDashboard } from "react-icons/bi"
 import { MdElectricBolt, MdComment, MdSettings } from "react-icons/md"
 import { FaUsers } from "react-icons/fa6"
-import { BsCashCoin } from "react-icons/bs"
 import Link from "next/link"
 
 export function MenuLateral() {

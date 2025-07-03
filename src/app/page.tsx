@@ -67,7 +67,7 @@ export default function Home() {
           }
 
           // Função para salvar cookies de forma segura
-          const salvarCookieSeguro = (nome: string, valor: any) => {
+          const salvarCookieSeguro = (nome: string, valor: unknown) => {
             if (valor && valor !== 'undefined' && valor !== 'null' && valor.toString().trim() !== '') {
               Cookies.set(nome, valor.toString())
               console.log(`Cookie ${nome} salvo com valor:`, valor)

@@ -9,11 +9,20 @@ type AdminPayload = {
   adminLogadoNivel: number;
 };
 
+type DebugInfo = {
+  allCookies?: string;
+  admin_logado_id?: string;
+  admin_logado_nome?: string;
+  admin_logado_token?: string;
+  tokenDecoded?: AdminPayload;
+  tokenDecodeError?: Error;
+}
+
 export default function DebugPage() {
-  const [debugInfo, setDebugInfo] = useState<any>({})
+  const [debugInfo, setDebugInfo] = useState<DebugInfo>({})
 
   useEffect(() => {
-    const info: any = {}
+    const info: DebugInfo = {}
     
     // Pegar todos os cookies
     const allCookies = document.cookie
@@ -30,7 +39,7 @@ export default function DebugPage() {
         const decoded = jwtDecode<AdminPayload>(info.admin_logado_token)
         info.tokenDecoded = decoded
       } catch (error) {
-        info.tokenDecodeError = error
+        info.tokenDecodeError = error instanceof Error ? error : new Error('Erro desconhecido')
       }
     }
     

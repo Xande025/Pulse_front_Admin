@@ -116,7 +116,7 @@ export function useAdmin() {
         }
         
         setIsLoading(false)
-      } catch (err) {
+      } catch {
         setError("Erro ao recarregar dados")
         setAdminNome("Admin")
         setIsLoading(false)

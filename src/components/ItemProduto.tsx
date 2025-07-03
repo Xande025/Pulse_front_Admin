@@ -31,7 +31,7 @@ function ItemProduto({ produto, produtos, setProdutos }: listaProdutoProps) {
       const decoded = jwtDecode<AdminPayload>(token);
       setAdmin(decoded);
       // console.log("Usuário logado:", decoded); // Log removido para evitar spam
-    } catch (error) {
+    } catch {
       alert("Token inválido");
     }
   }, []);

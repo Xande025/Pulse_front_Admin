@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useState } from "react"
-import Link from 'next/link'
 
 import { ComentarioI } from "@/utils/types/comentarios"
 import ItemComentario from "@/components/ItemComentario"

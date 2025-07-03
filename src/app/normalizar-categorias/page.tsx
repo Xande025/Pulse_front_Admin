@@ -22,7 +22,7 @@ export default function NormalizarCategorias() {
       console.log('Produtos encontrados:', produtos.length)
       
       // Mapear categorias que precisam ser normalizadas
-      const categoriasNormalizadas = {
+      const categoriasNormalizadas: Record<string, string> = {
         'smartphone': 'SMARTPHONE',
         'Smartphone': 'SMARTPHONE',
         'notebook': 'NOTEBOOK',
@@ -119,7 +119,7 @@ Erros: ${erros}`
       <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
         <h2 className="text-lg font-semibold mb-2">⚠️ Atenção</h2>
         <p className="text-sm text-gray-700">
-          Esta operação irá normalizar todas as categorias dos produtos para maiúscula (ex: "Smartphone" → "SMARTPHONE").
+          Esta operação irá normalizar todas as categorias dos produtos para maiúscula (ex: &quot;Smartphone&quot; → &quot;SMARTPHONE&quot;).
           Isso resolve o problema de categorias duplicadas no gráfico do dashboard.
         </p>
       </div>
