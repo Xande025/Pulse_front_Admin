@@ -3,9 +3,14 @@ import Cookies from 'js-cookie'
 import { jwtDecode } from 'jwt-decode'
 
 type AdminPayload = {
-  adminLogadoId: string;
-  adminLogadoNome: string;
-  adminLogadoNivel: number;
+  id: string;
+  nome: string;
+  email: string;
+  nivel: number;
+  // Campos alternativos caso o backend use formato diferente
+  adminLogadoId?: string;
+  adminLogadoNome?: string;
+  adminLogadoNivel?: number;
 }
 
 export function useAdmin() {
@@ -47,17 +52,23 @@ export function useAdmin() {
             const decoded = jwtDecode<AdminPayload>(cookieToken)
             console.log("Token decodificado:", decoded)
             
-            if (decoded.adminLogadoNome && decoded.adminLogadoNome !== 'undefined') {
-              setAdminNome(decoded.adminLogadoNome)
-              setAdminId(decoded.adminLogadoId || "")
+            // Tentar extrair nome usando diferentes possíveis campos
+            const nomeExtraido = decoded.nome || decoded.adminLogadoNome
+            const idExtraido = decoded.id || decoded.adminLogadoId
+            
+            if (nomeExtraido && nomeExtraido !== 'undefined') {
+              setAdminNome(nomeExtraido)
+              setAdminId(idExtraido || "")
               
               // Atualizar cookie com o nome do token
-              Cookies.set("admin_logado_nome", decoded.adminLogadoNome)
-              Cookies.set("admin_logado_id", decoded.adminLogadoId)
+              Cookies.set("admin_logado_nome", nomeExtraido)
+              if (idExtraido) {
+                Cookies.set("admin_logado_id", idExtraido)
+              }
               
               console.log("Dados carregados do token e cookies atualizados")
             } else {
-              console.error("Nome não encontrado no token")
+              console.log("Nome não encontrado no token")
               setError("Nome do admin não encontrado no token")
               setAdminNome("Admin")
             }
@@ -100,11 +111,16 @@ export function useAdmin() {
         } else if (cookieToken && cookieToken !== 'undefined') {
           try {
             const decoded = jwtDecode<AdminPayload>(cookieToken)
-            if (decoded.adminLogadoNome && decoded.adminLogadoNome !== 'undefined') {
-              setAdminNome(decoded.adminLogadoNome)
-              setAdminId(decoded.adminLogadoId || "")
-              Cookies.set("admin_logado_nome", decoded.adminLogadoNome)
-              Cookies.set("admin_logado_id", decoded.adminLogadoId)
+            const nomeExtraido = decoded.nome || decoded.adminLogadoNome
+            const idExtraido = decoded.id || decoded.adminLogadoId
+            
+            if (nomeExtraido && nomeExtraido !== 'undefined') {
+              setAdminNome(nomeExtraido)
+              setAdminId(idExtraido || "")
+              Cookies.set("admin_logado_nome", nomeExtraido)
+              if (idExtraido) {
+                Cookies.set("admin_logado_id", idExtraido)
+              }
             } else {
               setAdminNome("Admin")
             }

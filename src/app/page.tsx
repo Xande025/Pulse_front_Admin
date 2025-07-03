@@ -47,23 +47,28 @@ export default function Home() {
         console.log(`Status da resposta para ${rota}:`, response.status)
         
         if (response.status === 200) {
-          const admin = await response.json()
-          console.log("Login bem-sucedido:", admin)
+          const responseData = await response.json()
+          console.log("Login bem-sucedido:", responseData)
+          
+          // Extrair dados corretamente da resposta
+          const adminData = responseData.admin
+          const token = responseData.token
+          
           console.log("Dados do admin:", {
-            id: admin.id,
-            nome: admin.nome,
-            token: admin.token ? "Token presente" : "Token ausente"
+            id: adminData?.id,
+            nome: adminData?.nome,
+            token: token ? "Token presente" : "Token ausente"
           })
 
           // Verificar se os dados estão corretos
-          if (!admin.id) {
-            console.error("ERRO: ID do admin não encontrado na resposta")
+          if (!adminData?.id) {
+            console.log("AVISO: ID do admin não encontrado na resposta")
           }
-          if (!admin.nome) {
-            console.error("ERRO: Nome do admin não encontrado na resposta")
+          if (!adminData?.nome) {
+            console.log("AVISO: Nome do admin não encontrado na resposta")
           }
-          if (!admin.token) {
-            console.error("ERRO: Token não encontrado na resposta")
+          if (!token) {
+            console.log("AVISO: Token não encontrado na resposta")
           }
 
           // Função para salvar cookies de forma segura
@@ -72,14 +77,14 @@ export default function Home() {
               Cookies.set(nome, valor.toString())
               console.log(`Cookie ${nome} salvo com valor:`, valor)
             } else {
-              console.error(`ERRO: Tentativa de salvar cookie ${nome} com valor inválido:`, valor)
+              console.log(`AVISO: Tentativa de salvar cookie ${nome} com valor inválido:`, valor)
             }
           }
 
           // Salvar cookies apenas se os valores forem válidos
-          salvarCookieSeguro("admin_logado_id", admin.id)
-          salvarCookieSeguro("admin_logado_nome", admin.nome)
-          salvarCookieSeguro("admin_logado_token", admin.token)
+          salvarCookieSeguro("admin_logado_id", adminData?.id)
+          salvarCookieSeguro("admin_logado_nome", adminData?.nome)
+          salvarCookieSeguro("admin_logado_token", token)
 
           // Verificar se os cookies foram salvos corretamente
           setTimeout(() => {
@@ -94,7 +99,7 @@ export default function Home() {
             
             // Verificar se pelo menos o token foi salvo
             if (!cookieToken) {
-              console.error("ERRO CRÍTICO: Token não foi salvo. Login pode não funcionar corretamente.")
+              console.log("AVISO CRÍTICO: Token não foi salvo. Login pode não funcionar corretamente.")
               toast.error("Erro interno: Token não foi salvo. Tente novamente.")
               return
             }
@@ -109,10 +114,10 @@ export default function Home() {
                   Cookies.set("admin_logado_nome", decoded.adminLogadoNome)
                   console.log("Nome extraído do token e salvo:", decoded.adminLogadoNome)
                 } else {
-                  console.error("Nome não encontrado no payload do token")
+                  console.log("Nome não encontrado no payload do token")
                 }
               } catch (e) {
-                console.error("Erro ao decodificar token:", e)
+                console.log("Erro ao decodificar token:", e)
               }
             }
           }, 100)
@@ -125,13 +130,13 @@ export default function Home() {
         } else if (response.status !== 404) {
           // Se não é 404, é uma rota válida mas com outro erro
           const errorText = await response.text()
-          console.error("Erro na API:", response.status, errorText)
+          console.log("Erro na API:", response.status, errorText)
           toast.error(`Erro na API: ${response.status}`)
           return
         }
         // Se é 404, continua testando outras rotas
       } catch (error) {
-        console.error(`Erro ao testar rota ${rota}:`, error)
+        console.log(`Erro ao testar rota ${rota}:`, error)
       }
     }
     
