@@ -36,9 +36,12 @@ export default function Home() {
     
     for (const rota of rotasLogin) {
       try {
-        console.log("Testando rota:", `${process.env.NEXT_PUBLIC_URL_API}${rota}`)
+        // Corrigir barra dupla na URL
+        const baseURL = process.env.NEXT_PUBLIC_URL_API?.replace(/\/$/, '') || '';
+        const url = `${baseURL}${rota.startsWith("/") ? "" : "/"}${rota}`;
+        console.log("Testando rota:", url)
         
-        const response = await fetch(`${process.env.NEXT_PUBLIC_URL_API}${rota}`, {
+        const response = await fetch(url, {
           method: "POST",
           headers: {"Content-type": "application/json"},
           body: JSON.stringify({email: data.email, senha: data.senha})
